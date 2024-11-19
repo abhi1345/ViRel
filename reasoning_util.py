@@ -118,9 +118,10 @@ def to_tuple(tensor):
 
 def get_root_dir():
     dirname = os.getcwd()
-    dirname_split = dirname.split("/")
-    index = dirname_split.index("reasoning")
-    dirname = "/".join(dirname_split[:index + 1])
+    # dirname_split = dirname.split("/")
+    # print("Dirs", dirname_split)
+    # index = dirname_split.index("BabyARC")
+    # dirname = "/".join(dirname_split[:index + 1])
     return dirname
 
 

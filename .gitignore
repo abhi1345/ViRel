@@ -17,6 +17,11 @@ web/static/music/*
 web/static/states/*
 results/*
 tmp/*
+cache/*
+results-path/*
+*.lan
+*.p
+*.pt
 
 # Distribution / packaging
 .Python
@@ -145,3 +150,4 @@ dmypy.json
 
 # PyTorch lightning
 lightning_logs
+

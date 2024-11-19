@@ -17,6 +17,7 @@ from collections import defaultdict as ddict
 from util import get_num_edges, load_pkl
 
 AGGR_TASK_CACHE = "cache"
+os.makedirs(AGGR_TASK_CACHE, exist_ok=True)
 
 EXAMPLES_PER_TASK = 6
 

@@ -25,6 +25,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
+torch.multiprocessing.set_start_method('fork')
 
 from pytorch_net.util import Printer, to_nx_graph, draw_nx_graph, to_line_graph, nx_to_graph
 
@@ -38,6 +39,7 @@ from util import *
 import networkx.algorithms.isomorphism as iso
 
 # from reasoning.concept_env.BabyARC.code.dataset.dataset import * # Only needed for CLI generation
+from BabyARC.code.dataset.objects import Object
 
 p = Printer()
 
@@ -518,6 +520,7 @@ def edge_dist_fast(loader, model, args, device, bw_01, relId2edgeDist=None, prot
             edge_mask_b = edge_mask.bool()
             gt_edge_mask = gt_edge[edge_mask_b].unsqueeze(-1)
             task_ids_mask = task_ids.unsqueeze(1).expand(edge_mask.shape)[edge_mask_b].unsqueeze(-1)
+            edge_matrix_comp = torch.cat([rel_matrix_s_mask, task_ids_mask, gt_edge_mask], dim=1)
             
             uniq_edges_comp, counts = torch.unique(edge_matrix_comp, return_counts=True, dim=0)
             for uniq_edge_comp, count in zip(uniq_edges_comp.tolist(), counts.tolist()):

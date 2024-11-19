@@ -36,7 +36,6 @@ from einops import rearrange, repeat
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
 
-
 import sys, os
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..'))
 # sys.path.append(os.path.join(os.path.dirname("__file__"), '..', '..'))
@@ -58,7 +57,8 @@ from reasoning_util import model_parallel, color_dict, clip_grad, identity_fun, 
 from pytorch_net.util import to_cpu_recur, try_call, Printer, transform_dict, MineDataset, is_diagnose, reduce_tensor, get_hashing, pdump, pload, remove_elements, loss_op_core, filter_kwargs, to_Variable, gather_broadcast, get_pdict, COLOR_LIST, set_seed, Zip, Early_Stopping, init_args, make_dir, str2bool, get_filename_short, get_machine_name, get_device, record_data, plot_matrices, filter_filename, get_next_available_key, to_np_array, to_Variable, get_filename_short, write_to_config, Dictionary, Batch, to_cpu
 p = Printer()
 
-REA_PATH = "/dfs/user/tailin/.results"
+REA_PATH = "results-path/"
+os.makedirs(REA_PATH, exist_ok=True)
 
 
 # ## 1. Dataset:
@@ -172,7 +172,7 @@ class ConceptDataset(Dataset):
                         canvas_size=canvas_size,
                     )
                     babyArcDataset = BabyARCDataset(
-                        pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
+                        pretrained_obj_cache=os.path.join(get_root_dir(), 'BabyARC/data-files/arc_objs.pt'),
                         save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
                         object_limit=None,
                         noise_level=0,
@@ -296,7 +296,7 @@ class ConceptDataset(Dataset):
                     self.concept_collection = mode.split("-")[-1].split("+")
                     input_concepts = [""]
                 dataset = BabyARCDataset(
-                    pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
+                    pretrained_obj_cache=os.path.join(get_root_dir(), 'BabyARC/data-files/arc_objs.pt'),
                     save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
                     object_limit=None,
                     noise_level=0,
@@ -1308,7 +1308,7 @@ class ConceptCompositionDataset(Dataset):
         if idx_list is None:
             assert data is None
             dataset_engine = BabyARCDataset(
-                pretrained_obj_cache=os.path.join(get_root_dir(), 'concept_env/datasets/arc_objs.pt'),
+                pretrained_obj_cache=os.path.join(get_root_dir(), 'BabyARC/data-files/arc_objs.pt'),
                 save_directory=get_root_dir() + "/concept_env/BabyARCDataset/",
                 object_limit=None,
                 noise_level=0,
@@ -5857,7 +5857,8 @@ def get_filename(args, short_str_dict, is_local_path):
         args_dict=args.__dict__,
     )
     if is_local_path:
-        dirname = REA_PATH_LOCAL + "/{}_{}/".format(args.exp_id, args.date_time)
+        dirname = REA_PATH + "/{}_{}/".format(args.exp_id, args.date_time) 
+        #REA_PATH_LOCAL + "/{}_{}/".format(args.exp_id, args.date_time)
     else:
         dirname = REA_PATH + "/{}_{}/".format(args.exp_id, args.date_time)
     if args.exp_name != "None":
